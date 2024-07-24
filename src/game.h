@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 struct game {
+	Uint64 next_frame;
 	SDL_Window* win;
 	SDL_Renderer* ren;
 	SDL_Event e;

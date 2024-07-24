@@ -1,5 +1,16 @@
 #include "window.h"
 
+Uint64 time_left(struct game* g)
+{
+	Uint64 now;
+
+	now = SDL_GetTicks64();
+	if (g->next_frame <= now)
+		return 0;
+	else
+		return g->next_frame - now;
+}
+
 int init_SDL(struct game* g, struct settings* sett)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -15,6 +26,9 @@ int init_SDL(struct game* g, struct settings* sett)
 		}
 		else {
 			g->ren = SDL_CreateRenderer(g->win, -1, sett->ren_flags);
+			SDL_SetRenderDrawColor(g->ren, 0, 0, 0, 0);
+			SDL_RenderClear(g->ren);
+			SDL_RenderPresent(g->ren);
 			return 1;
 		}
 	}	

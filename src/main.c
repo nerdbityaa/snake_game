@@ -24,13 +24,15 @@ int main()
 	}
 	}
 
+	g->next_frame = SDL_GetTicks64() + TICK_INTERVAL;
 	while (g->quit < 0) {
-		SDL_UpdateWindowSurface(g->win);
 		while (SDL_PollEvent(&g->e)) {
 			handle_events(g);
 		}
 		update(g);
 		render(g);
+		SDL_Delay(time_left(g));
+		g->next_frame += TICK_INTERVAL;
 	}
 	close_SDL(g);
 }

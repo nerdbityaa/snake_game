@@ -13,10 +13,10 @@ void handle_events(struct game* g)
 
 void update(struct game* g)
 {
-
+	(void) g;
 }
 
 void render(struct game* g)
 {
-
+	(void) g;
 }
