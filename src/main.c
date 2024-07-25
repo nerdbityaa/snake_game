@@ -21,7 +21,7 @@ int main()
 		.quit = -1,
 	};
 	for (int i = 0; i < g->m->h; ++i)
-		g->m->m[i] = calloc(g->m->w, sizeof(char));
+		g->m->m[i] = malloc(g->m->w * sizeof(char));
 	strcpy(g->m->m[0], "####################");
 	for (int i = 1; i < g->m->h - 1; ++i)
 		strcpy(g->m->m[i], "#..................#");
@@ -54,4 +54,7 @@ int main()
 		g->next_frame += TICK_INTERVAL;
 	}
 	close_SDL(g);
+	for (int i = 0; i < g->m->h; ++i)
+		free((void*) g->m->m[i]);
+	free(g->m->m);
 }
