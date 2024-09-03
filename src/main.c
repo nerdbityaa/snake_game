@@ -3,14 +3,8 @@
 int main()
 {
 	struct game* g;
-	{ // init block
+	// init block
 	g = &(struct game) {
-		.p = &(player) {
-			.x = 5,
-			.y = 5,
-			.dir = DIR_RIGHT,
-			.length = 4,
-		},
 		.m = &(map) {
 			.w = 20,
 			.h = 20,
@@ -41,7 +35,17 @@ int main()
 		printf("!!\t[main]init error.\n");
 		return 1;
 	}
-	} // init block
+	g->p = &(snake) {
+			.body = calloc((g->m->h-2)*(g->m->w-2)*2, sizeof(Sint16)),
+			.dirs = calloc((g->m->h-2)*(g->m->w-2), sizeof(enum directions)),
+	};
+	for (unsigned long i = 0; i < sizeof(g->p->body)/sizeof(g->p->body[0]); ++i)
+		g->p->body[i] = calloc(2, sizeof(Sint16));
+	g->p->body[0][0] = 5;
+	g->p->body[0][1] = 5;
+	for (unsigned long i = 1; i < sizeof(g->p->body)/sizeof(g->p->body[0]); ++i)
+		g->p->body[i][0] = -1;
+	// init block
 
 	g->next_frame = SDL_GetTicks64() + TICK_INTERVAL;
 	while (g->quit < 0) {
@@ -54,6 +58,10 @@ int main()
 		g->next_frame += TICK_INTERVAL;
 	}
 	close_SDL(g);
+	for (unsigned long i = 0; i < sizeof(g->p->body)/sizeof(g->p->body[0]); ++i) {
+		free((void*) g->p->body[i]);
+	}
+	free((void*) g->p->body);
 	for (int i = 0; i < g->m->h; ++i)
 		free((void*) g->m->m[i]);
 	free(g->m->m);

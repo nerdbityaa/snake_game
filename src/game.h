@@ -10,12 +10,15 @@ enum directions {
 	DIR_UP,
 };
 
-typedef struct player {
-	int x;
-	int y;
-	int dir;
-	int length;	
-} player;
+typedef struct snake {
+	Sint16 *body[2]; // array of snake's body coordinates
+	enum directions *dirs; 
+} snake;
+
+typedef struct food {
+	Uint16 x;
+	Uint16 y;
+} food;
 
 typedef struct map {
 	int w;
@@ -24,8 +27,9 @@ typedef struct map {
 } map;
 
 struct game {
-	player* p;
+	snake* p;
 	map* m;
+	food* f;
 
 	Uint64 next_frame;
 	SDL_Window* win;
@@ -45,6 +49,8 @@ struct settings {
 };
 
 // game logic 'n stuff
+
+Uint16 get_snake_size(snake*);
 
 void handle_events(struct game*);
 void update(struct game*);
