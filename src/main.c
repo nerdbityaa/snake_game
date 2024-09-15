@@ -36,17 +36,20 @@ int main()
 		return 1;
 	}
 	g->p = &(snake) {
-			.body = calloc((g->m->h-2)*(g->m->w-2)*2, sizeof(Sint16)),
+		.body = &(struct snake_body) {
+			.values = calloc((g->m->h-2)*(g->m->w-2), sizeof(Sint16)),
 			.dirs = calloc((g->m->h-2)*(g->m->w-2), sizeof(enum directions)),
+		},
+		.head = &(struct snake_head) {
+			.dir = DIR_RIGHT,
+			.x = 5,
+			.y = 5
+		},
+		.size = 1,
 	};
-	for (unsigned long i = 0; i < sizeof(g->p->body)/sizeof(g->p->body[0]); ++i)
-		g->p->body[i] = calloc(2, sizeof(Sint16));
-	g->p->body[0][0] = 5;
-	g->p->body[0][1] = 5;
-	for (unsigned long i = 1; i < sizeof(g->p->body)/sizeof(g->p->body[0]); ++i)
-		g->p->body[i][0] = -1;
 	// init block
 
+	// game loop
 	g->next_frame = SDL_GetTicks64() + TICK_INTERVAL;
 	while (g->quit < 0) {
 		while (SDL_PollEvent(&g->e)) {
@@ -57,12 +60,12 @@ int main()
 		SDL_Delay(time_left(g));
 		g->next_frame += TICK_INTERVAL;
 	}
+	// game loop
+
+	// quit block
 	close_SDL(g);
-	for (unsigned long i = 0; i < sizeof(g->p->body)/sizeof(g->p->body[0]); ++i) {
-		free((void*) g->p->body[i]);
-	}
-	free((void*) g->p->body);
 	for (int i = 0; i < g->m->h; ++i)
 		free((void*) g->m->m[i]);
 	free(g->m->m);
+	// quit block
 }

@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <SDL2/SDL.h>
+#include "util.h"
 
 enum directions {
 	DIR_RIGHT,
@@ -10,9 +11,21 @@ enum directions {
 	DIR_UP,
 };
 
+struct snake_head {
+	Sint16 x;
+	Sint16 y;
+	enum directions dir; 
+};
+
+struct snake_body {
+	Sint16* values;
+	enum directions* dirs;
+};
+
 typedef struct snake {
-	Sint16 *body[2]; // array of snake's body coordinates
-	enum directions *dirs; 
+	struct snake_head* head;
+	struct snake_body* body;
+	Sint16 size;
 } snake;
 
 typedef struct food {
